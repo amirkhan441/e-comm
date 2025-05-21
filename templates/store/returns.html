@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Return Policy - StyleHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mb-4" data-aos="fade-up">
+                <div class="card-body p-md-5">
+                    <h1 class="mb-4">Return Policy</h1>
+                    
+                    <div class="alert alert-primary mb-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle fa-lg mt-1 me-3"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading">30-Day Return Policy</h5>
+                                <p class="mb-0">We want you to be completely satisfied with your purchase. If you're not happy with your order for any reason, you can return it within 30 days of delivery for a full refund.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3>Return Eligibility</h3>
+                        <p>To be eligible for a return, your item must be:</p>
+                        
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item bg-transparent d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-3"></i>
+                                Unworn, unwashed, and unaltered
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-3"></i>
+                                In its original packaging with all tags attached
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-3"></i>
+                                Free from any scents or odors
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-3"></i>
+                                Purchased directly from StyleHub
+                            </li>
+                        </ul>
+                        
+                        <p><strong>Note:</strong> Sale items and intimates are final sale and cannot be returned unless defective.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3>How to Return an Item</h3>
+                        <ol class="list-group list-group-numbered mb-4">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Log in to your account</div>
+                                    Visit your Order History and find the order containing the items you wish to return.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Initiate your return</div>
+                                    Click "Return Items" and select the products you want to return along with a reason.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Print your return label</div>
+                                    Use the prepaid shipping label provided or generate a new one if needed.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Package your items</div>
+                                    Securely package your items with all tags attached in the original or similar packaging.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Ship your return</div>
+                                    Drop off your package at the specified carrier location. We recommend keeping your receipt until the return is processed.
+                                </div>
+                            </li>
+                        </ol>
+                        
+                        <p>Once we receive your return (typically 5-7 business days after shipping), we'll inspect the items and process your refund within 2-3 business days.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3>Refund Process</h3>
+                        <p>Refunds will be issued to the original payment method used for the purchase. Please note:</p>
+                        <ul>
+                            <li>Credit card refunds may take 5-10 business days to appear on your statement, depending on your financial institution</li>
+                            <li>Return shipping costs will be deducted from your refund unless the return is due to a defect, damage, or our error</li>
+                            <li>Original shipping charges are non-refundable unless the return is due to our error</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3>Exchanges</h3>
+                        <p>We currently don't offer direct exchanges. For a different size or color, please return the original item and place a new order for the desired product. This ensures you get the item you want without delays.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3>Damaged or Defective Items</h3>
+                        <p>If you receive a damaged or defective item, please contact our customer service team within 48 hours of delivery. Provide your order number and clear photos of the damage or defect. We'll work quickly to make it right.</p>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-question-circle fa-lg mt-1 me-3"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading">Need Help?</h5>
+                                <p class="mb-0">If you have any questions about returns or exchanges, please <a href="{% url 'store:contact' %}">contact our customer service team</a> for assistance.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

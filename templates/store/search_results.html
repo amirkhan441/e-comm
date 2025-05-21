@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results for "{{ search_query }}" | StyleHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Search Results</li>
+            </ol>
+        </nav>
+        
+        <h1 class="mb-4">Search Results for "{{ search_query }}"</h1>
+        
+        <div class="mb-4">
+            <form action="{% url 'store:search_products' %}" method="GET" class="d-flex">
+                <input type="text" name="q" value="{{ search_query }}" class="form-control me-2" placeholder="Search products..." aria-label="Search">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+        
+        {% if products %}
+            <p>{{ products.paginator.count }} product{% if products.paginator.count != 1 %}s{% endif %} found</p>
+        {% endif %}
+    </div>
+    
+    {% if products %}
+    <div class="row g-3">
+        {% for product in products %}
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="card product-card h-100">
+                    <a href="{{ product.get_absolute_url }}" class="position-relative">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                        {% endif %}
+                        {% if product.is_featured %}
+                        <span class="badge bg-danger" style="position: absolute; top: 10px; left: 10px; z-index: 5;">Featured</span>
+                        {% endif %}
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <div>
+                            <div class="mb-2">
+                                <span class="category-badge">{{ product.category.name }}</span>
+                                <span class="gender-badge">{{ product.get_gender_display }}</span>
+                                {% if product.collection %}
+                                <span class="collection-badge">{{ product.get_collection_display }}</span>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title">{{ product.name }}</h5>
+                        </div>
+                        <div class="mt-auto">
+                            <p class="price">₹{{ product.price }}</p>
+                            <div class="action-buttons">
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm action-button">View Details</a>
+                                <a href="{% url 'store:add_to_wishlist' product.id %}" class="action-button wishlist-button" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?q={{ search_query }}&page=1" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?q={{ search_query }}&page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?q={{ search_query }}&page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-search fa-4x mb-3"></i>
+        <h3>No products found</h3>
+        <p>Try searching for something else or explore our product categories.</p>
+        <a href="{% url 'store:product_list' %}" class="btn btn-primary">Browse All Products</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

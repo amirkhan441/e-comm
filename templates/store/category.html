@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if gender %}
+        {{ gender|title }}'s Collection | StyleHub
+    {% else %}
+        {{ category.name }} | StyleHub
+    {% endif %}
+{% endblock %}
+
+{% block structured_data %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {% if gender %}
+                    {{ gender|title }}'s Collection
+                {% else %}
+                    {{ category.name }}
+                {% endif %}
+            </li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Categories</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'store:product_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-layer-group me-2"></i> All Products
+                        </a>
+                        <a href="{% url 'store:category' 'men' %}" class="list-group-item list-group-item-action {% if gender == 'men' %}active{% endif %}">
+                            <i class="fas fa-male me-2"></i> Men's Collection
+                        </a>
+                        <a href="{% url 'store:category' 'women' %}" class="list-group-item list-group-item-action {% if gender == 'women' %}active{% endif %}">
+                            <i class="fas fa-female me-2"></i> Women's Collection
+                        </a>
+                        <a href="{% url 'store:category' 'unisex' %}" class="list-group-item list-group-item-action {% if gender == 'unisex' %}active{% endif %}">
+                            <i class="fas fa-user-friends me-2"></i> Unisex Collection
+                        </a>
+                        {% for cat in categories %}
+                            <a href="{% url 'store:category' cat.slug %}" class="list-group-item list-group-item-action {% if category.slug == cat.slug %}active{% endif %}">
+                                <i class="fas fa-tag me-2"></i> {{ cat.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collection Filter -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Collection</h5>
+                </div>
+                <div class="card-body p-0">
+                    <form method="get" id="filter-form">
+                        {% if gender %}
+                        <input type="hidden" name="gender" value="{{ gender }}">
+                        {% endif %}
+                        <div class="list-group list-group-flush">
+                            <button type="submit" name="collection" value="" class="list-group-item list-group-item-action {% if not current_collection %}active{% endif %} text-start">
+                                <i class="fas fa-tshirt me-2"></i> All Collections
+                            </button>
+                            <button type="submit" name="collection" value="summer" class="list-group-item list-group-item-action {% if current_collection == 'summer' %}active{% endif %} text-start">
+                                <i class="fas fa-sun me-2"></i> Summer Collection
+                            </button>
+                            <button type="submit" name="collection" value="winter" class="list-group-item list-group-item-action {% if current_collection == 'winter' %}active{% endif %} text-start">
+                                <i class="fas fa-snowflake me-2"></i> Winter Collection
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Container -->
+        <div class="col-lg-9">
+            <!-- Header Section -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    {% if gender %}
+                        {{ gender|title }}'s Collection
+                    {% else %}
+                        {{ category.name }}
+                    {% endif %}
+                </h1>
+                <div class="badge bg-primary py-2 px-3">{{ products.paginator.count }} Products</div>
+            </div>
+            
+            <!-- Active Filters -->
+            {% if current_collection %}
+            <div class="active-filters mb-4">
+                <div class="d-flex align-items-center">
+                    <span class="me-2">Active Filters:</span>
+                    <span class="badge bg-primary me-2">
+                        {{ current_collection|title }} Collection
+                        <a href="?{% if gender %}gender={{ gender }}{% endif %}" class="text-white ms-1"><i class="fas fa-times"></i></a>
+                    </span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Product Grid -->
+            <div class="row g-3">
+                {% for product in products %}
+                <div class="col-6 col-md-4">
+                    <div class="card product-card h-100">
+                        <a href="{{ product.get_absolute_url }}" class="position-relative">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                            {% endif %}
+                            {% if product.is_featured %}
+                            <span class="badge bg-danger" style="position: absolute; top: 10px; left: 10px; z-index: 5;">Featured</span>
+                            {% endif %}
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <div>
+                                <div class="mb-2">
+                                    <span class="category-badge">{{ product.category.name }}</span>
+                                    <span class="gender-badge">{{ product.get_gender_display }}</span>
+                                    {% if product.collection %}
+                                    <span class="collection-badge">{{ product.get_collection_display }}</span>
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title">{{ product.name }}</h5>
+                            </div>
+                            <div class="mt-auto">
+                                <p class="price">₹{{ product.price }}</p>
+                                <div class="action-buttons">
+                                    <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm action-button">View Details</a>
+                                    <a href="{% url 'store:add_to_wishlist' product.id %}" class="action-button wishlist-button" title="Add to Wishlist">
+                                        <i class="far fa-heart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="fas fa-box-open fa-4x mb-3"></i>
+                        <h3>No products found</h3>
+                        <p>Try changing your filter criteria or check back later.</p>
+                        <a href="{% url 'store:product_list' %}" class="btn btn-primary">Browse All Products</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if current_collection %}&collection={{ current_collection }}{% endif %}{% if gender %}&gender={{ gender }}{% endif %}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_collection %}&collection={{ current_collection }}{% endif %}{% if gender %}&gender={{ gender }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_collection %}&collection={{ current_collection }}{% endif %}{% if gender %}&gender={{ gender }}{% endif %}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_collection %}&collection={{ current_collection }}{% endif %}{% if gender %}&gender={{ gender }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if current_collection %}&collection={{ current_collection }}{% endif %}{% if gender %}&gender={{ gender }}{% endif %}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Shipping Information - StyleHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mb-4" data-aos="fade-up">
+                <div class="card-body p-md-5">
+                    <h1 class="mb-4">Shipping Information</h1>
+                    
+                    <div class="mb-5">
+                        <h3>Delivery Options</h3>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Shipping Method</th>
+                                        <th>Estimated Delivery</th>
+                                        <th>Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Standard Shipping</td>
+                                        <td>3-5 Business Days</td>
+                                        <td>₹449</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Express Shipping</td>
+                                        <td>1-2 Business Days</td>
+                                        <td>₹999</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Next Day Delivery</td>
+                                        <td>Next Business Day (order before 2pm)</td>
+                                        <td>₹1499</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-muted mt-2"><small>*Free standard shipping on orders over ₹5000</small></p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3>Shipping Policy</h3>
+                        <p>At StyleHub, we want to make sure you receive your items as quickly and efficiently as possible. Here's what you need to know about our shipping process:</p>
+                        
+                        <h5 class="mt-4">Order Processing</h5>
+                        <p>Most orders are processed within 24 hours of being placed. Orders placed on weekends or holidays will be processed the next business day.</p>
+                        
+                        <h5 class="mt-4">Tracking Your Order</h5>
+                        <p>Once your order has shipped, you will receive a confirmation email with tracking information. You can also track your order by logging into your account and viewing your order history.</p>
+                        
+                        <h5 class="mt-4">International Shipping</h5>
+                        <p>We currently ship to the United States, Canada, and select European countries. International shipping rates and delivery times vary by location. Please allow 7-14 business days for international deliveries.</p>
+                        
+                        <h5 class="mt-4">Shipping Restrictions</h5>
+                        <p>Some products cannot be shipped to certain locations due to regulations. If this affects your order, we will contact you promptly.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <h3>Frequently Asked Questions</h3>
+                        
+                        <div class="accordion" id="shippingFAQ">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                        When will my order ship?
+                                    </button>
+                                </h2>
+                                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#shippingFAQ">
+                                    <div class="accordion-body">
+                                        Most orders ship within 1-2 business days after payment confirmation. You'll receive a shipping confirmation email with tracking information once your order is on its way.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                        Can I change my shipping address after placing my order?
+                                    </button>
+                                </h2>
+                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#shippingFAQ">
+                                    <div class="accordion-body">
+                                        If your order hasn't shipped yet, we may be able to change the shipping address. Please contact our customer service team as soon as possible with your order number.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                        What if my package is lost or damaged?
+                                    </button>
+                                </h2>
+                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#shippingFAQ">
+                                    <div class="accordion-body">
+                                        In the rare event that your package is lost or damaged during transit, please contact our customer service team within 48 hours of the expected delivery date. We'll work with you to resolve the issue promptly.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> If you have any questions about shipping that aren't answered here, please <a href="{% url 'store:contact' %}">contact us</a> and we'll be happy to help.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Your Wishlist - StyleHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Your Wishlist</h1>
+    
+    {% if wishlist_products %}
+    <div class="row">
+        {% for product in wishlist_products %}
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card product-card h-100">
+                {% if product.image %}
+                <a href="{{ product.get_absolute_url }}" class="position-relative">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                    <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                {% endif %}
+                </a>
+                <div class="card-body d-flex flex-column">
+                    <div>
+                        <div class="mb-2">
+                            <span class="category-badge">{{ product.category.name }}</span>
+                            <span class="gender-badge">{{ product.get_gender_display }}</span>
+                            {% if product.collection %}
+                            <span class="collection-badge">{{ product.get_collection_display }}</span>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title">{{ product.name }}</h5>
+                    </div>
+                    <p class="price">₹{{ product.price }}</p>
+                    <div class="mt-2">
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-primary w-100 mb-2">View Details</a>
+                        <div class="d-flex">
+                            <form method="post" action="{% url 'store:add_to_cart' product.id %}" class="flex-grow-1 me-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <input type="hidden" name="size" value="M">
+                                <button type="submit" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </form>
+                            <a href="{% url 'store:remove_from_wishlist' product.id %}" class="btn btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card shadow-sm text-center p-5">
+        <div class="card-body">
+            <i class="fas fa-heart fa-5x text-muted mb-4"></i>
+            <h2>Your wishlist is empty</h2>
+            <p class="lead">Save items you love to your wishlist.</p>
+            <a href="{% url 'store:product_list' %}" class="btn btn-primary">
+                Shop Now
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

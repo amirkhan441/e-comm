@@ -1,0 +1,61 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Order Confirmation - StyleHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-sm text-center p-5">
+        <div class="card-body">
+            <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+            <h2>Order Placed Successfully!</h2>
+            <p class="lead mb-4">Thank you for shopping with StyleHub.</p>
+            
+            <div class="order-details text-start mb-4">
+                <h5 class="mb-3">Order Details</h5>
+                <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                <p><strong>Date:</strong> {{ order.created_at|date:"F j, Y" }}</p>
+                <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+                <p><strong>City:</strong> {{ order.city }}</p>
+                <p><strong>Postal Code:</strong> {{ order.postal_code }}</p>
+                <p><strong>Phone:</strong> {{ order.phone }}</p>
+            </div>
+            
+            <div class="order-items mb-4">
+                <h5 class="mb-3">Order Items</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.size }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>₹{{ item.price }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <a href="{% url 'store:home' %}" class="btn btn-primary me-2">
+                    Continue Shopping
+                </a>
+                <a href="{% url 'store:profile' %}" class="btn btn-outline-primary">
+                    View Orders
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

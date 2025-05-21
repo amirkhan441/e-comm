@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Your Cart - StyleHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Your Shopping Cart</h1>
+    
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4 border-0 rounded-3">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="px-4" style="width: 100px;">Product</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Size</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td class="align-middle px-4">
+                                        {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail rounded shadow-sm" style="max-width: 80px;">
+                                        {% else %}
+                                        <img src="{% static 'images/no-image.jpg' %}" alt="{{ item.product.name }}" class="img-thumbnail rounded shadow-sm" style="max-width: 80px;">
+                                        {% endif %}
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="{{ item.product.get_absolute_url }}" class="text-decoration-none fw-bold">
+                                            {{ item.product.name }}
+                                        </a>
+                                        <div class="text-muted small">{{ item.product.category.name }}</div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span class="badge bg-secondary">{{ item.size }}</span>
+                                    </td>
+                                    <td class="align-middle fw-bold">₹{{ item.product.price }}</td>
+                                    <td class="align-middle">
+                                        <form method="post" action="{% url 'store:update_cart' item.id %}" class="d-flex align-items-center">
+                                            {% csrf_token %}
+                                            <div class="input-group input-group-sm" style="width: 100px;">
+                                                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="decrementQuantity('quantity-{{ item.id }}')">-</button>
+                                                <input type="number" name="quantity" id="quantity-{{ item.id }}" class="form-control text-center" value="{{ item.quantity }}" min="1">
+                                                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="incrementQuantity('quantity-{{ item.id }}')">+</button>
+                                            </div>
+                                            <button type="submit" class="btn btn-sm btn-outline-primary ms-2" title="Update quantity">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="align-middle fw-bold text-primary">₹{{ item.get_cost }}</td>
+                                    <td class="align-middle">
+                                        <a href="{% url 'store:remove_from_cart' item.id %}" class="btn btn-sm btn-outline-danger" title="Remove item">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex mb-4">
+                <a href="{% url 'store:product_list' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i> Continue Shopping
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal</span>
+                        <span class="fw-bold">₹{{ cart.get_total }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Shipping</span>
+                        <span class="text-success">FREE</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold">Total</span>
+                        <span class="fw-bold fs-5">₹{{ cart.get_total }}</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="coupon" class="form-label">Promo Code</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter code" id="coupon">
+                            <button class="btn btn-outline-secondary" type="button">Apply</button>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'store:checkout' %}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-lock me-2"></i> Checkout
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <h6 class="mb-3">We Accept</h6>
+                    <div class="d-flex gap-2 mb-2">
+                        <i class="fab fa-cc-visa fa-2x text-muted"></i>
+                        <i class="fab fa-cc-mastercard fa-2x text-muted"></i>
+                        <i class="fab fa-cc-amex fa-2x text-muted"></i>
+                        <i class="fab fa-cc-paypal fa-2x text-muted"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card shadow-sm text-center py-5 border-0 rounded-3">
+        <div class="card-body">
+            <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+            <h2>Your cart is empty</h2>
+            <p class="lead mb-4">Add items to your cart to proceed with your purchase.</p>
+            <a href="{% url 'store:product_list' %}" class="btn btn-primary btn-lg">
+                Shop Now
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+    function incrementQuantity(inputId) {
+        const input = document.getElementById(inputId);
+        input.value = parseInt(input.value) + 1;
+    }
+    
+    function decrementQuantity(inputId) {
+        const input = document.getElementById(inputId);
+        const currentValue = parseInt(input.value);
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+        }
+    }
+</script>
+{% endblock %}
+{% endblock %} 

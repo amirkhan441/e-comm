@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Frequently Asked Questions - StyleHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mb-4" data-aos="fade-up">
+                <div class="card-body p-md-5">
+                    <h1 class="mb-4">Frequently Asked Questions</h1>
+                    
+                    <div class="mb-4">
+                        <p class="lead">Find answers to our most commonly asked questions. If you can't find what you're looking for, please <a href="{% url 'store:contact' %}">contact us</a>.</p>
+                    </div>
+                    
+                    <div class="accordion accordion-flush mb-5" id="faqAccordion">
+                        <!-- Order & Shipping -->
+                        <div class="mb-4">
+                            <h3>Orders & Shipping</h3>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                        How do I track my order?
+                                    </button>
+                                </h2>
+                                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Once your order has shipped, you will receive a shipping confirmation email with a tracking number. You can also track your order by logging into your account and viewing your order history. Click on the specific order to see its current status and tracking information.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                        How long will it take to receive my order?
+                                    </button>
+                                </h2>
+                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Standard shipping typically takes 3-5 business days, while express shipping takes 1-2 business days. International orders may take 7-14 business days depending on your location and customs processing. Please note that these are estimates and delivery times may vary.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                        Can I change or cancel my order?
+                                    </button>
+                                </h2>
+                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Orders can be changed or canceled within 1 hour of placement. After this time, we begin processing orders and cannot guarantee changes. Please contact our customer service team immediately if you need to make changes to your order.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Returns & Exchanges -->
+                        <div class="mb-4">
+                            <h3>Returns & Exchanges</h3>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                        What is your return policy?
+                                    </button>
+                                </h2>
+                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        We offer a 30-day return policy for most items. Products must be unused, in their original packaging, and with all tags attached. For detailed information, please visit our <a href="{% url 'store:returns' %}">Returns page</a>.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                        How do I return or exchange an item?
+                                    </button>
+                                </h2>
+                                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        To return or exchange an item, log into your account, find your order, and select "Return Items." Follow the instructions to print your return label. Package your items securely with all tags attached and drop off at your nearest shipping location.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Account & Payment -->
+                        <div class="mb-4">
+                            <h3>Account & Payment</h3>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                        How do I create an account?
+                                    </button>
+                                </h2>
+                                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Click on the "Account" button in the top right corner of our website and select "Register." Fill in your information and submit the form. You'll receive a confirmation email to verify your account.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                        What payment methods do you accept?
+                                    </button>
+                                </h2>
+                                <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        We accept Visa, Mastercard, American Express, Discover, PayPal, and Apple Pay. All transactions are secure and encrypted.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                        Are my payment details secure?
+                                    </button>
+                                </h2>
+                                <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Yes, all payment information is encrypted using SSL technology. We never store your full credit card details on our servers. Our payment processing complies with PCI DSS (Payment Card Industry Data Security Standard).
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product Information -->
+                        <div class="mb-4">
+                            <h3>Product Information</h3>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                                        How do I find my size?
+                                    </button>
+                                </h2>
+                                <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Each product page includes a size guide with detailed measurements. For general size recommendations, visit our Size Chart page. If you're between sizes, we typically recommend choosing the larger size.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">
+                                        How do I care for my items?
+                                    </button>
+                                </h2>
+                                <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Care instructions are provided on product pages and on the care label of each item. Generally, we recommend washing clothes in cold water and air-drying to maintain fabric quality and prevent shrinkage.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5">
+                        <h3>Still Have Questions?</h3>
+                        <p>Our customer support team is ready to assist you. Please <a href="{% url 'store:contact' %}">contact us</a> with any questions not covered in our FAQ section.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

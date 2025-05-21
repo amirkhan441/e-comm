@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}StyleHub - Your Fashion Destination{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container text-center">
+        <h1>Welcome to StyleHub</h1>
+        <p class="lead">Discover the latest trends in fashion</p>
+        <a href="{% url 'store:product_list' %}" class="btn btn-light btn-lg">Shop Now</a>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-header">Featured Products</h2>
+        <div class="row g-3">
+            {% for product in featured_products %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card product-card h-100">
+                    <a href="{{ product.get_absolute_url }}" class="position-relative">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                        {% endif %}
+                        {% if product.is_featured %}
+                        <span class="badge bg-danger" style="position: absolute; top: 10px; left: 10px; z-index: 5;">Featured</span>
+                        {% endif %}
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <div>
+                            <div class="mb-2">
+                                <span class="category-badge">{{ product.category.name }}</span>
+                                <span class="gender-badge">{{ product.get_gender_display }}</span>
+                                {% if product.collection %}
+                                <span class="collection-badge">{{ product.get_collection_display }}</span>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title">{{ product.name }}</h5>
+                        </div>
+                        <div class="mt-auto">
+                            <p class="price">₹{{ product.price }}</p>
+                            <div class="action-buttons">
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm action-button">View Details</a>
+                                <a href="{% url 'store:add_to_wishlist' product.id %}" class="action-button wishlist-button" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No featured products available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+    <div class="container text-center">
+        <h2>Summer Collection 2025</h2>
+        <p class="lead mb-4">Upgrade your wardrobe with our latest summer collection.</p>
+        <a href="{% url 'store:product_list' %}" class="btn btn-light btn-lg">Explore Now</a>
+    </div>
+</section>
+
+
+<!-- Men's Collection -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-header">Men's Collection</h2>
+        <div class="row g-3">
+            {% for product in men_products %}
+            <div class="col-sm-6 col-md-3">
+                <div class="card product-card h-100">
+                    <a href="{{ product.get_absolute_url }}" class="position-relative">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                        {% endif %}
+                        {% if product.is_featured %}
+                        <span class="badge bg-danger" style="position: absolute; top: 10px; left: 10px; z-index: 5;">Featured</span>
+                        {% endif %}
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <div>
+                            <div class="mb-2">
+                                <span class="category-badge">{{ product.category.name }}</span>
+                                <span class="gender-badge">{{ product.get_gender_display }}</span>
+                                {% if product.collection %}
+                                <span class="collection-badge">{{ product.get_collection_display }}</span>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title">{{ product.name }}</h5>
+                        </div>
+                        <div class="mt-auto">
+                            <p class="price">₹{{ product.price }}</p>
+                            <div class="action-buttons">
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm action-button">View Details</a>
+                                <a href="{% url 'store:add_to_wishlist' product.id %}" class="action-button wishlist-button" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No men's products available.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'store:category' 'men' %}" class="btn btn-outline-primary">View All Men's Products</a>
+        </div>
+    </div>
+</section>
+
+<!-- Women's Collection -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-header">Women's Collection</h2>
+        <div class="row g-3">
+            {% for product in women_products %}
+            <div class="col-sm-6 col-md-3">
+                <div class="card product-card h-100">
+                    <a href="{{ product.get_absolute_url }}" class="position-relative">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+                        {% endif %}
+                        {% if product.is_featured %}
+                        <span class="badge bg-danger" style="position: absolute; top: 10px; left: 10px; z-index: 5;">Featured</span>
+                        {% endif %}
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <div>
+                            <div class="mb-2">
+                                <span class="category-badge">{{ product.category.name }}</span>
+                                <span class="gender-badge">{{ product.get_gender_display }}</span>
+                                {% if product.collection %}
+                                <span class="collection-badge">{{ product.get_collection_display }}</span>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title">{{ product.name }}</h5>
+                        </div>
+                        <div class="mt-auto">
+                            <p class="price">₹{{ product.price }}</p>
+                            <div class="action-buttons">
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm action-button">View Details</a>
+                                <a href="{% url 'store:add_to_wishlist' product.id %}" class="action-button wishlist-button" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No women's products available.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'store:category' 'women' %}" class="btn btn-outline-primary">View All Women's Products</a>
+        </div>
+    </div>
+</section>
+{% endblock %} 

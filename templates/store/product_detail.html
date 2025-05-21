@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - {{ product.category.name }} | StyleHub{% endblock %}
+
+
+
+{% block structured_data %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="card mb-5">
+        <div class="row g-0">
+            <div class="col-md-6">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="img-fluid product-detail-img p-4" alt="{{ product.name }} - {{ product.get_gender_display }} {{ product.category.name }}">
+                {% else %}
+                <img src="{% static 'images/no-image.jpg' %}" class="img-fluid product-detail-img p-4" alt="{{ product.name }} - {{ product.get_gender_display }} {{ product.category.name }}">
+                {% endif %}
+            </div>
+            <div class="col-md-6 product-detail-info">
+                <div class="d-flex mb-2">
+                    <span class="category-badge">{{ product.category.name }}</span>
+                    <span class="gender-badge">{{ product.get_gender_display }}</span>
+                    {% if product.collection %}
+                    <span class="collection-badge">{{ product.get_collection_display }}</span>
+                    {% endif %}
+                </div>
+                <h1 class="mb-2">{{ product.name }}</h1>
+                
+                <h3 class="price mb-4">₹{{ product.price }}</h3>
+                
+                <div class="mb-4">
+                    <h5>Description</h5>
+                    <p>{{ product.description }}</p>
+                </div>
+                
+                <form method="post" action="{% url 'store:add_to_cart' product.id %}">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <h5 class="mb-3">Select Size</h5>
+                        <div class="btn-group" role="group" aria-label="Size selection">
+                            <input type="radio" class="btn-check" name="size" id="size-xs" value="XS" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="size-xs">XS</label>
+                            
+                            <input type="radio" class="btn-check" name="size" id="size-s" value="S" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="size-s">S</label>
+                            
+                            <input type="radio" class="btn-check" name="size" id="size-m" value="M" autocomplete="off" checked>
+                            <label class="btn btn-outline-dark" for="size-m">M</label>
+                            
+                            <input type="radio" class="btn-check" name="size" id="size-l" value="L" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="size-l">L</label>
+                            
+                            <input type="radio" class="btn-check" name="size" id="size-xl" value="XL" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="size-xl">XL</label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="mb-3">Quantity</h5>
+                        <div class="input-group" style="max-width: 150px;">
+                            <button class="btn btn-outline-dark" type="button" id="decrease-quantity">-</button>
+                            <input type="number" class="form-control text-center" name="quantity" value="1" min="1" id="quantity">
+                            <button class="btn btn-outline-dark" type="button" id="increase-quantity">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 col-12 col-md-8 col-lg-6">
+                        <button type="submit" class="btn btn-primary btn-lg add-to-cart-btn">
+                            <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                        </button>
+                        
+                        <a href="{% url 'store:add_to_wishlist' product.id %}" class="btn btn-outline-dark">
+                            <i class="far fa-heart me-2"></i> Add to Wishlist
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reviews Section -->
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="mb-4">Customer Reviews</h2>
+                
+                <!-- Review Form -->
+                {% if user.is_authenticated %}
+                    {% if not user_review %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Write a Review</h5>
+                                <form method="post" action="{% url 'store:add_review' product.id %}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label class="form-label">Rating</label>
+                                        <div class="rating-input">
+                                            {% for i in "54321" %}
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" required>
+                                                    <label class="form-check-label" for="rating{{ i }}">{{ i }} Star{{ i|pluralize }}</label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="comment" class="form-label">Your Review</label>
+                                        <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info">
+                        Please <a href="{% url 'store:login' %}">login</a> to write a review.
+                    </div>
+                {% endif %}
+
+                <!-- Existing Reviews -->
+                <div class="reviews-list">
+                    {% for review in product.reviews.all %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ review.user.username }}</h6>
+                                    <small class="text-muted">{{ review.created_at|date:"F d, Y" }}</small>
+                                </div>
+                                <div class="mb-2">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <p class="card-text">{{ review.comment }}</p>
+                                {% if user == review.user %}
+                                    <div class="mt-2">
+                                        <a href="{% url 'store:edit_review' review.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a href="{% url 'store:delete_review' review.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this review?')">Delete</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="alert alert-info">
+                            No reviews yet. Be the first to review this product!
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Review Summary -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Review Summary</h5>
+                        {% with total_reviews=product.reviews.count %}
+                            {% if total_reviews > 0 %}
+                                {% with avg_rating=product.reviews.aggregate.avg_rating %}
+                                    <div class="text-center mb-3">
+                                        <h2 class="mb-0">{{ avg_rating|floatformat:1 }}</h2>
+                                        <div class="mb-2">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= avg_rating %}
+                                                    <i class="fas fa-star text-warning"></i>
+                                                {% else %}
+                                                    <i class="far fa-star text-warning"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <p class="text-muted">{{ total_reviews }} review{{ total_reviews|pluralize }}</p>
+                                    </div>
+                                {% endwith %}
+                            {% else %}
+                                <p class="text-center text-muted">No reviews yet</p>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="related-products">
+        <h2 class="section-header">Related Products</h2>
+        <div class="row">
+            {% for related in related_products %}
+            <div class="col-6 col-md-3">
+                <div class="card product-card">
+                    {% if related.image %}
+                    <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.name }} - {{ related.get_gender_display }} {{ related.category.name }}">
+                    {% else %}
+                    <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="{{ related.name }} - {{ related.get_gender_display }} {{ related.category.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <span class="category-badge">{{ related.category.name }}</span>
+                        <span class="gender-badge">{{ related.get_gender_display }}</span>
+                        <h5 class="card-title mt-2">{{ related.name }}</h5>
+                        <p class="price">₹{{ related.price }}</p>
+                        <a href="{{ related.get_absolute_url }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No related products available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quantity handlers
+        const quantityInput = document.getElementById('quantity');
+        const decreaseBtn = document.getElementById('decrease-quantity');
+        const increaseBtn = document.getElementById('increase-quantity');
+        
+        decreaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+        
+        increaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 
